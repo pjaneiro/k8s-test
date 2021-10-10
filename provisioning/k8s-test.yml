@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-test
+spec:
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 3000
+  selector:
+    app: k8s-test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-test
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: k8s-test
+  template:
+    metadata:
+      labels:
+        app: k8s-test
+    spec:
+      containers:
+      - name: k8s-test
+        image: ghcr.io/pjaneiro/k8s-test:0.0.1
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: rails-master-key
+          mountPath: /code/config/credentials
+          readOnly: true
+      volumes:
+      - name: rails-master-key
+        secret:
+          secretName: rails-master-key
+          items:
+          - key: production_key
+            path: production.key
+          - key: production_yml_enc
+            path: production.yml.enc
