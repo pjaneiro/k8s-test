@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/code
+      - gems:/usr/local/bundle
+    environment:
+      - HOST_NAME=http://localhost:3000
+    command: bundle exec rails server -u puma -p 3000 -b '0.0.0.0'
+    ports:
+      - "3000:3000"
+    working_dir: /code
+
+volumes:
+  gems:

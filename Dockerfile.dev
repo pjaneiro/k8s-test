@@ -1,0 +1,26 @@
+FROM ruby@sha256:2f6585f9a836ef254ff4cdcd5d2ad51cc7718d4f71b1bdf899408f61012cea4f
+LABEL maintainer="pjaneiro@whitesmith.co"
+
+ENV HOME /home/user
+ENV CODE /code
+
+# Create user and give it permissions over its home folder and gem folder
+RUN useradd --create-home --home-dir "$HOME" user && \
+  chown -R user:user "$HOME" && \
+  chown -R user:user "$GEM_HOME"
+
+# Install dependencies and base commands
+RUN apt-get update -qq && \
+  apt-get install --no-install-recommends -y build-essential=12.9 vim=2:8.2.2434-3 rsync=3.2.3-4+deb11u1 && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+USER user
+
+WORKDIR $CODE
+
+VOLUME $CODE
+
+EXPOSE 3000
+
+CMD ["bundle","exec","rails","server","-u","puma","-p","3000","-b","0.0.0.0"]
