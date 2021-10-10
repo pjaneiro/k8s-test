@@ -3,6 +3,7 @@ LABEL maintainer="pjaneiro@whitesmith.co"
 
 ENV HOME /home/user
 ENV CODE /code
+ENV EDITOR vim
 
 # Create user and give it permissions over its home folder and gem folder
 RUN useradd --create-home --home-dir "$HOME" user && \

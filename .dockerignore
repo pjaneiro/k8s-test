@@ -1,0 +1,8 @@
+.git/
+log/
+!log/.keep
+tmp/*
+!tmp/.keep
+
+.dockerignore
+config/credentials/*.key
