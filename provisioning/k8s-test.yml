@@ -3,10 +3,11 @@ kind: Service
 metadata:
   name: k8s-test
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - protocol: TCP
-    port: 3000
+    port: 80
+    targetPort: 3000
   selector:
     app: k8s-test
 ---
@@ -42,3 +43,15 @@ spec:
             path: production.key
           - key: production_yml_enc
             path: production.yml.enc
+      imagePullSecrets:
+      - name: regcred
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - k8s-test
+            topologyKey: "kubernetes.io/hostname"
