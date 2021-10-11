@@ -55,3 +55,15 @@ spec:
                 values:
                 - k8s-test
             topologyKey: "kubernetes.io/hostname"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: regcred
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: rails-master-key
+type: Opaque
